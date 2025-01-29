@@ -1,3 +1,4 @@
+// api.js
 import axios from 'axios';
 import { config } from '../config';
 
@@ -20,13 +21,13 @@ export const searchMovies = async (query) => {
     return [];
   }
 };
-
 export const getMovieDetails = async (movieId) => {
   try {
     console.log('Fetching movie details for ID:', movieId);
     const response = await axios.get(`${BASE_URL}/movie/${movieId}`, {
       params: {
         api_key: API_KEY,
+        append_to_response: 'videos,credits'
       },
     });
     console.log('API Response:', response.data);

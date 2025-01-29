@@ -1,17 +1,23 @@
+// MovieCard.jsx
 import PropTypes from 'prop-types';
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-  Rating,
-  Box,
-} from '@mui/material';
+import { useState } from 'react';
+import { Card, CardContent, CardMedia, Typography, Rating, Box, Button, Dialog } from '@mui/material';
+import MovieDetails from './MovieDetails';
 
 const MovieCard = ({ movie }) => {
+  const [open, setOpen] = useState(false);
+
   const imageUrl = movie.poster_path
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-    : 'https://via.placeholder.com/500x750?text=No+Image+Available';
+    : 'https://placehold.it/500x750?text=No+Image+Available';
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Card sx={{ maxWidth: 345, height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -39,7 +45,13 @@ const MovieCard = ({ movie }) => {
             {movie.vote_average.toFixed(1)}/10
           </Typography>
         </Box>
+        <Button variant="contained" onClick={handleOpen} sx={{ mt: 2 }}>
+          View Details
+        </Button>
       </CardContent>
+      <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth>
+        <MovieDetails movieId={movie.id} onClose={handleClose} />
+      </Dialog>
     </Card>
   );
 };
@@ -50,7 +62,8 @@ MovieCard.propTypes = {
     title: PropTypes.string.isRequired,
     vote_average: PropTypes.number,
     release_date: PropTypes.string,
-    overview: PropTypes.string
+    overview: PropTypes.string,
+    id: PropTypes.number.isRequired
   }).isRequired
 };
 
