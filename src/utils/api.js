@@ -21,6 +21,7 @@ export const searchMovies = async (query) => {
     return [];
   }
 };
+
 export const getMovieDetails = async (movieId) => {
   try {
     console.log('Fetching movie details for ID:', movieId);
@@ -35,5 +36,54 @@ export const getMovieDetails = async (movieId) => {
   } catch (error) {
     console.error('Error fetching movie details:', error.response ? error.response.data : error.message);
     return null;
+  }
+};
+
+// New functions to fetch popular and latest movies
+export const fetchPopularMovies = async () => {
+  try {
+    console.log('Fetching popular movies');
+    const response = await axios.get(`${BASE_URL}/movie/popular`, {
+      params: {
+        api_key: API_KEY,
+      },
+    });
+    console.log('API Response:', response.data);
+    return response.data.results;
+  } catch (error) {
+    console.error('Error fetching popular movies:', error.response ? error.response.data : error.message);
+    return [];
+  }
+};
+
+export const fetchLatestMovies = async () => {
+  try {
+    console.log('Fetching latest movies');
+    const response = await axios.get(`${BASE_URL}/movie/now_playing`, {
+      params: {
+        api_key: API_KEY,
+      },
+    });
+    console.log('API Response:', response.data);
+    return response.data.results;
+  } catch (error) {
+    console.error('Error fetching latest movies:', error.response ? error.response.data : error.message);
+    return [];
+  }
+};
+
+export const fetchTrendingMovies = async () => {
+  try {
+    console.log('Fetching trending movies');
+    const response = await axios.get(`${BASE_URL}/trending/movie/week`, {
+      params: {
+        api_key: API_KEY,
+      },
+    });
+    console.log('API Response:', response.data);
+    return response.data.results;
+  } catch (error) {
+    console.error('Error fetching trending movies:', error.response ? error.response.data : error.message);
+    return [];
   }
 };
