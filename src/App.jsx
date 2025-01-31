@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { 
   Container, 
   Typography, 
@@ -9,7 +9,9 @@ import {
   Box,
   IconButton,
   InputBase,
-  Paper
+  Paper,
+  ButtonGroup,
+  Grid
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -31,53 +33,50 @@ const theme = createTheme({
   },
 });
 
+// Debounce function
+const debounce = (func, wait) => {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
+};
+
 function App() {
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    const fetchMovies = async () => {
+  const handleSearch = useCallback(
+    debounce(async () => {
+      if (!searchQuery.trim()) return;
+      setError('');
       try {
-        const results = await searchMovies('popular');
+        const results = await searchMovies(searchQuery);
+        setFilter('search');
         setMovies(results);
       } catch (error) {
-        console.error('Error fetching movies:', error);
-      } finally {
-        setLoading(false);
+        console.error('Error searching movies:', error);
+        setError('Failed to search movies. Please try again later.');
       }
-    };
-
-    fetchMovies();
-  }, []);
-
-  const handleSearch = async () => {
-    if (!searchQuery.trim()) return;
-    setLoading(true);
-    try {
-      const results = await searchMovies(searchQuery);
-      setMovies(results);
-    } catch (error) {
-      console.error('Error searching movies:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    }, 500),
+    [searchQuery]
+  );
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AppBar position="static">
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <Typography variant="h6" component="div">
+        <Toolbar sx={{ justifyContent: { xs: 'center', sm: 'space-between' }, flexWrap: 'wrap' }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Movies 
           </Typography>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', width: { xs: '100%', sm: 'auto' }, justifyContent: { xs: 'center', sm: 'flex-end' } }}>
             {showSearch ? (
               <Paper
                 component="form"
-                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
+                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: { xs: '90%', sm: 400 } }}
                 onSubmit={(e) => {
                   e.preventDefault();
                   handleSearch();
@@ -98,6 +97,7 @@ function App() {
                 color="inherit"
                 startIcon={<SearchIcon />}
                 onClick={() => setShowSearch(true)}
+                sx={{ display: { xs: 'none', sm: 'block' } }}
               >
                 Search
               </Button>
@@ -111,7 +111,7 @@ function App() {
           background: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)), url(${backgroundImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          padding: '6rem 0',
+          padding: { xs: '3rem 0', sm: '6rem 0' },
           textAlign: 'center',
           marginBottom: '2rem'
         }}
@@ -123,7 +123,8 @@ function App() {
             gutterBottom
             sx={{
               color: '#fff',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+              textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+              fontSize: { xs: '2rem', sm: '3rem', md: '4rem' }
             }}
           >
             Welcome to the Cinema Experience! 
@@ -134,7 +135,8 @@ function App() {
             gutterBottom 
             sx={{ 
               color: '#e0e0e0',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+              textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+              fontSize: { xs: '1rem', sm: '1.5rem', md: '2rem' }
             }}
           >
             Discover your next favorite movie
@@ -143,13 +145,13 @@ function App() {
       </Box>
 
       <Container>
-        {loading ? (
-          <Typography variant="h6" sx={{ textAlign: 'center', mt: 4 }}>
-            Loading...
-          </Typography>
-        ) : (
-          <MovieList movies={movies} />
-        )}
+        <ButtonGroup sx={{ mt: 4, flexWrap: 'wrap' }} variant="outlined" aria-label="outlined button group">
+          <Button onClick={() => setFilter('all')} sx={{ flex: { xs: '1 0 100%', sm: 'auto' } }}>All</Button>
+          <Button onClick={() => setFilter('popular')} sx={{ flex: { xs: '1 0 100%', sm: 'auto' } }}>Popular</Button>
+          <Button onClick={() => setFilter('latest')} sx={{ flex: { xs: '1 0 100%', sm: 'auto' } }}>Latest</Button>
+        </ButtonGroup>
+
+        <MovieList filter={filter} />
       </Container>
     </ThemeProvider>
   );
