@@ -1,25 +1,55 @@
-import { useState } from 'react';
-import { Container, Typography, Grid, Button, ButtonGroup } from '@mui/material';
+// MovieList.jsx
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Container, Typography, Grid } from '@mui/material';
 import MovieCard from './MovieCard';
+import { fetchTrendingMovies, fetchPopularMovies, fetchLatestMovies } from '../utils/api';
 
-const MovieList = ({ movies }) => {
-  const [filter, setFilter] = useState('all');
+const MovieList = ({ filter }) => {
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const filterMovies = (movies, filter) => {
-    switch (filter) {
-      case 'popular':
-        return [...movies].filter(a => a.popularity >= 2);
-      case 'latest':
-        return [...movies].filter(a => new Date(a.release_date).getFullYear() >= 2015);
-      default:
-        return movies;
-    }
-  };
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        let results;
+        if (filter === 'popular') {
+          results = await fetchPopularMovies();
+        } else if (filter === 'latest') {
+          results = await fetchLatestMovies();
+        } else {
+          results = await fetchTrendingMovies();
+        }
+        setMovies(results);
+      } catch (error) {
+        console.error('Error fetching movies:', error);
+        setError('Failed to fetch movies. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const filteredMovies = filterMovies(movies, filter);
+    fetchMovies();
+  }, [filter]);
 
-  if (!filteredMovies.length) {
+  if (loading) {
+    return (
+      <Typography variant="h6" sx={{ textAlign: 'center', mt: 4 }}>
+        Loading...
+      </Typography>
+    );
+  }
+
+  if (error) {
+    return (
+      <Typography variant="h6" sx={{ textAlign: 'center', mt: 4, color: 'red' }}>
+        {error}
+      </Typography>
+    );
+  }
+
+  if (!movies.length) {
     return (
       <Container>
         <Typography variant="h5" sx={{ textAlign: 'center', mt: 4 }}>
@@ -31,13 +61,8 @@ const MovieList = ({ movies }) => {
 
   return (
     <Container>
-      <ButtonGroup sx={{ mt: 4 }} variant="outlined" aria-label="outlined button group">
-        <Button onClick={() => setFilter('all')}>All</Button>
-        <Button onClick={() => setFilter('popular')}>Popular</Button>
-        <Button onClick={() => setFilter('latest')}>Latest</Button>
-      </ButtonGroup>
       <Grid container spacing={3} sx={{ mt: 2 }}>
-        {filteredMovies.map((movie) => (
+        {movies.map((movie) => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={movie.id}>
             <MovieCard movie={movie} />
           </Grid>
@@ -48,7 +73,7 @@ const MovieList = ({ movies }) => {
 };
 
 MovieList.propTypes = {
-  movies: PropTypes.arrayOf(PropTypes.object).isRequired,
+  filter: PropTypes.string.isRequired,
 };
 
 export default MovieList;
