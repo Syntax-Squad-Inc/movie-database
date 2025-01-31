@@ -13,10 +13,12 @@ const MovieDetails = ({ movieId, onClose }) => {
       const data = await getMovieDetails(movieId);
       setMovie(data);
       setLoading(false);
+      console.log(data)
     };
 
     fetchMovieDetails();
   }, [movieId]);
+
 
   if (loading) {
     return <Typography>Loading...</Typography>;

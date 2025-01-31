@@ -20,39 +20,38 @@ const MovieCard = ({ movie }) => {
   };
 
   return (
-    <Card sx={{ maxWidth: 345, height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <CardMedia
-        component="img"
-        height="500"
-        image={imageUrl}
-        alt={movie.title}
-        sx={{ objectFit: 'cover' }}
-      />
-      <CardContent sx={{ flexGrow: 1 }}>
-        <Typography gutterBottom variant="h6" component="div">
-          {movie.title}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
+    <Card sx={{ maxWidth: 345, height: '100%', display: 'flex', flexDirection: 'column', border: 'ButtonHighlight' }}>
+    <CardMedia
+      component="img"
+      height="200"
+      image={imageUrl}
+      alt={movie.title}
+      sx={{ objectFit: 'cover' }}
+    />
+    <CardContent sx={{ flexGrow: 1 }}>
+      <Typography gutterBottom variant="h6" component="div">
+        {movie.title}
+      </Typography>
+    </CardContent>
+    <Box sx={{ mt: 'auto', p: 2 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 2 }}>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           {movie.release_date?.split('-')[0]}
         </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-          <Rating
-            value={movie.vote_average / 2}
-            precision={0.5}
-            readOnly
-          />
-          <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
-            {movie.vote_average.toFixed(1)}/10
-          </Typography>
-        </Box>
-        <Button variant="contained" onClick={handleOpen} sx={{ mt: 2 }}>
-          View Details
-        </Button>
-      </CardContent>
-      <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth>
-        <MovieDetails movieId={movie.id} onClose={handleClose} />
-      </Dialog>
-    </Card>
+        <Rating
+          value={movie.vote_average / 2}
+          precision={0.5}
+          readOnly
+        />
+      </Box>
+      <Button variant="contained" onClick={handleOpen}>
+        View Details
+      </Button>
+    </Box>
+    <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth>
+      <MovieDetails movieId={movie.id} onClose={handleClose} />
+    </Dialog>
+  </Card>
   );
 };
 
