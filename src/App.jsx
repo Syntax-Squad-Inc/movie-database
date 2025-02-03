@@ -90,11 +90,7 @@ function App() {
       <CssBaseline />
       <div style={{
         minHeight: '100vh',
-        backgroundImage: `url(${backgroundImages[currentBackgroundIndex]})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        transition: 'background-image 1s ease-in-out',
+        backgroundColor: '#121212',
         position: 'relative',
       }}>
         <AppBar position="static">
@@ -138,12 +134,32 @@ function App() {
         
         <Box
           sx={{
+            height: { xs: '60vh', sm: '70vh' },  
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             padding: { xs: '3rem 0', sm: '6rem 0' },
             textAlign: 'center',
-            marginBottom: '2rem'
+            marginBottom: '2rem',
+            position: 'relative',
+            backgroundImage: `url(${backgroundImages[currentBackgroundIndex]})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            transition: 'background-image 1s ease-in-out',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              zIndex: 1
+            }
           }}
         >
-          <Container>
+          <Container sx={{ position: 'relative', zIndex: 2 }}>
             <Typography 
               variant="h2" 
               component="h1" 
@@ -151,7 +167,7 @@ function App() {
               sx={{
                 color: '#fff',
                 textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
-                fontSize: { xs: '2rem', sm: '3rem', md: '4rem' }
+                fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4.5rem' }  
               }}
             >
               Welcome to the Cinema Experience! 
@@ -163,7 +179,9 @@ function App() {
               sx={{ 
                 color: '#e0e0e0',
                 textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
-                fontSize: { xs: '1rem', sm: '1.5rem', md: '2rem' }
+                fontSize: { xs: '1.2rem', sm: '1.7rem', md: '2.2rem' },  
+                maxWidth: '800px',  
+                margin: '0 auto'  
               }}
             >
               Discover your next favorite movie
@@ -171,7 +189,7 @@ function App() {
           </Container>
         </Box>
 
-        <Container>
+        <Container sx={{ backgroundColor: '#121212', position: 'relative', zIndex: 2 }}>
           <ButtonGroup sx={{ mt: 4, flexWrap: 'wrap' }} variant="outlined" aria-label="outlined button group">
             <Button onClick={() => setFilter('all')} sx={{ flex: { xs: '1 0 100%', sm: 'auto' } }}>All</Button>
             <Button onClick={() => setFilter('popular')} sx={{ flex: { xs: '1 0 100%', sm: 'auto' } }}>Popular</Button>
