@@ -7,11 +7,9 @@ function Footer() {
       sx={{
         py: 3,
         px: 2,
-        mt: 'auto',
-        backgroundColor: (theme) =>
-          theme.palette.mode === 'light'
-            ? theme.palette.grey[200]
-            : theme.palette.grey[800],
+        backgroundColor: '#2d0808', // Dark red background
+        borderTop: '1px solid #d32f2f', // Red border
+        width: '100%',
       }}
     >
       <Container maxWidth="lg">
@@ -23,8 +21,8 @@ function Footer() {
             alignItems: 'center',
           }}
         >
-          <Typography variant="body2" color="text.secondary">
-            © {new Date().getFullYear()} Movie Database. All rights reserved.
+          <Typography variant="body2" sx={{ color: '#ff8a80' }}> {/* Light red text */}
+            {new Date().getFullYear()} Movie Database. All rights reserved.
           </Typography>
           <Box
             sx={{
@@ -33,13 +31,40 @@ function Footer() {
               mt: { xs: 2, sm: 0 },
             }}
           >
-            <Link href="#" color="inherit" underline="hover">
+            <Link 
+              href="#" 
+              sx={{ 
+                color: '#ff8a80', 
+                '&:hover': {
+                  color: '#ff4444'
+                }
+              }} 
+              underline="hover"
+            >
               About
             </Link>
-            <Link href="#" color="inherit" underline="hover">
+            <Link 
+              href="#" 
+              sx={{ 
+                color: '#ff8a80', 
+                '&:hover': {
+                  color: '#ff4444'
+                }
+              }} 
+              underline="hover"
+            >
               Privacy Policy
             </Link>
-            <Link href="#" color="inherit" underline="hover">
+            <Link 
+              href="#" 
+              sx={{ 
+                color: '#ff8a80', 
+                '&:hover': {
+                  color: '#ff4444'
+                }
+              }} 
+              underline="hover"
+            >
               Terms of Use
             </Link>
           </Box>

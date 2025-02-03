@@ -1,50 +1,40 @@
-// MovieList.jsx
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Container, Typography, Grid } from '@mui/material';
 import MovieCard from './MovieCard';
 import { fetchTrendingMovies, fetchPopularMovies, fetchLatestMovies } from '../utils/api';
 
-const MovieList = ({ filter }) => {
+const MovieList = ({ filter, searchResults, loading }) => {
   const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        let results;
-        if (filter === 'popular') {
-          results = await fetchPopularMovies();
-        } else if (filter === 'latest') {
-          results = await fetchLatestMovies();
-        } else {
-          results = await fetchTrendingMovies();
+    if (filter === 'search') {
+      setMovies(searchResults);
+    } else {
+      const fetchMovies = async () => {
+        try {
+          let results;
+          if (filter === 'popular') {
+            results = await fetchPopularMovies();
+          } else if (filter === 'latest') {
+            results = await fetchLatestMovies();
+          } else {
+            results = await fetchTrendingMovies();
+          }
+          setMovies(results);
+        } catch (error) {
+          console.error('Error fetching movies:', error);
         }
-        setMovies(results);
-      } catch (error) {
-        console.error('Error fetching movies:', error);
-        setError('Failed to fetch movies. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
+      };
 
-    fetchMovies();
-  }, [filter]);
+      fetchMovies();
+    }
+  }, [filter, searchResults]);
 
   if (loading) {
     return (
       <Typography variant="h6" sx={{ textAlign: 'center', mt: 4 }}>
         Loading...
-      </Typography>
-    );
-  }
-
-  if (error) {
-    return (
-      <Typography variant="h6" sx={{ textAlign: 'center', mt: 4, color: 'red' }}>
-        {error}
       </Typography>
     );
   }
@@ -74,6 +64,8 @@ const MovieList = ({ filter }) => {
 
 MovieList.propTypes = {
   filter: PropTypes.string.isRequired,
+  searchResults: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default MovieList;
