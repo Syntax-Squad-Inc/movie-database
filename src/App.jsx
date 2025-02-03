@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { 
   Container, 
   Typography, 
@@ -18,8 +18,14 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import MovieList from './components/MovieList';
 import Footer from './components/Footer';
 import { searchMovies } from './utils/api';
-import backgroundImage from '../image/OIP.jfif';
 import './App.css';
+
+// Array of background images - using high-quality movie-themed backgrounds
+const backgroundImages = [
+  'https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2025&q=80',  // Movie Theater
+  'https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',  // Colorful Cinema Lights
+  'https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2056&q=80',  // Colorful Theater Interior
+];
 
 const theme = createTheme({
   palette: {
@@ -50,6 +56,7 @@ function App() {
   const [error, setError] = useState('');
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
 
   const handleSearch = useCallback(
     debounce(async () => {
@@ -67,16 +74,29 @@ function App() {
     [searchQuery]
   );
 
+  // Background slideshow effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentBackgroundIndex((prevIndex) => 
+        (prevIndex + 1) % backgroundImages.length
+      );
+    }, 5000); // Change image every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: '100vh',
-        }}
-      >
+      <div style={{
+        minHeight: '100vh',
+        backgroundImage: `url(${backgroundImages[currentBackgroundIndex]})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        transition: 'background-image 1s ease-in-out',
+        position: 'relative',
+      }}>
         <AppBar position="static">
           <Toolbar sx={{ justifyContent: { xs: 'center', sm: 'space-between' }, flexWrap: 'wrap' }}>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -118,9 +138,6 @@ function App() {
         
         <Box
           sx={{
-            background: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)), url(${backgroundImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
             padding: { xs: '3rem 0', sm: '6rem 0' },
             textAlign: 'center',
             marginBottom: '2rem'
@@ -164,7 +181,7 @@ function App() {
           <MovieList filter={filter} />
         </Container>
         <Footer />
-      </Box>
+      </div>
     </ThemeProvider>
   );
 }
