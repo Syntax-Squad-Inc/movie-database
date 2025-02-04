@@ -172,7 +172,7 @@ function App() {
 }}>
   <Box component="img" src={image} color={light} alt="Logo" sx={{ height: 100, mr: 2 }} />
   <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-    Movies 
+    Syntax Squad Movies 
   </Typography>
   <Box sx={{ display: 'flex', alignItems: 'center', width: { xs: '100%', sm: 'auto' }, justifyContent: { xs: 'center', sm: 'flex-end' } }}>
     {showSearch ? (
@@ -285,8 +285,8 @@ function App() {
                   color: '#fff',
                   '&:hover': { color: '#ff4444' },
                   position: 'fixed',  // Fixed positioning
-                  top: 50,  // Adjust this value to set the distance from the top
-                  right:10,
+                  top: 100,  // Adjust this value to set the distance from the top
+                  left:20,
                   zIndex: 2
                 }}
               >
