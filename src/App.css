@@ -1,19 +1,166 @@
+/* Professional Movie Database Theme */
+:root {
+  --primary-color: #1a1a2e;
+  --secondary-color: #16213e;
+  --accent-color: #e94560;
+  --text-color: #f5f5f5;
+  --card-background: rgba(26, 26, 46, 0.8);
+}
+
+body {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
 #root {
-  max-width: 1280px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
 
+.background-slideshow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  filter: brightness(0.5) contrast(1.2);
+}
+
+.background-slideshow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  transform: translateZ(-100px);
+  z-index: -1;
+}
+
+.background-slideshow::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9));
+  z-index: -1;
+  transform: translateZ(-50px);
+}
+
+.card {
+  background-color: var(--card-background);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  padding: 1.5em;
+  margin-bottom: 1.5em;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: var(--text-color); /* Ensure text is visible */
+  position: relative; /* Ensure proper stacking */
+  z-index: 10; /* Bring card above background */
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+.MuiPaper-root {
+  background-color: var(--secondary-color) !important;
+  color: var(--text-color) !important;
+}
+
+.MuiButton-root {
+  background-color: var(--accent-color) !important;
+  color: var(--text-color) !important;
+  transition: background-color 0.3s ease;
+}
+
+.MuiButton-root:hover {
+  background-color: color-mix(in srgb, var(--accent-color) 80%, white) !important;
+}
+
+.MuiInputBase-root {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-color);
+  border-radius: 8px;
+}
+
+.MuiTypography-h2 {
+  color: var(--accent-color);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.MuiTypography-h5 {
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+.MuiGrid-container {
+  position: relative;
+  z-index: 15; /* Higher than card z-index */
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  #root {
+    padding: 1rem;
+  }
+
+  .MuiContainer-root {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .MuiTypography-h2 {
+    font-size: 1.8rem;
+  }
+
+  .MuiTypography-h5 {
+    font-size: 0.9rem;
+  }
+}
+
+/* Scrollbar Styling for Modern Look */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--secondary-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-color);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--accent-color) 80%, white);
+}
+
+/* Existing logo and animation styles */
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -33,82 +180,6 @@
   }
 }
 
-.card {
-  padding: 2em;
-}
-
 .read-the-docs {
   color: #888;
-}
-
-/* Background Slideshow Styles */
-.background-slideshow {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-}
-
-/* Add a dark overlay to improve text readability */
-.background-slideshow::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-}
-
-/* Responsive Design */
-
-@media (max-width: 600px) {
-  #root {
-    padding: 1rem;
-  }
-
-  .MuiContainer-root {
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-
-  .MuiTypography-h2 {
-    font-size: 2rem;
-  }
-
-  .MuiTypography-h5 {
-    font-size: 1rem;
-  }
-
-  .MuiButtonGroup-root {
-    flex-direction: column;
-  }
-
-  .MuiButtonBase-root {
-    margin-top: 8px;
-  }
-
-  .MuiAppBar-root {
-    flex-direction: column;
-  }
-
-  .MuiToolbar-root {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .MuiPaper-root {
-    width: 100%;
-  }
-
-  .MuiInputBase-root {
-    width: calc(100% - 48px); /* Adjust input width to fit inside Paper */
-  }
-
-  .MuiButton-root {
-    width: 100%;
-    margin-top: 10px;
-  }
 }

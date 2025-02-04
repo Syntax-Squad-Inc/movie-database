@@ -27,6 +27,15 @@ const backgroundImages = [
   'https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
 ];
 
+// Debounce function
+const debounce = (func, wait) => {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
+};
+
 const theme = createTheme({
   palette: {
     mode: 'dark',
@@ -43,15 +52,6 @@ const theme = createTheme({
   },
 });
 
-// Debounce function
-const debounce = (func, wait) => {
-  let timeout;
-  return (...args) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), wait);
-  };
-};
-
 function App() {
   const [filter, setFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -61,20 +61,35 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
   const [searchResults, setSearchResults] = useState([]);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Add scroll listener
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrolled = window.scrollY > 50;
+      setIsScrolled(scrolled);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleSearch = useCallback(async () => {
     if (!searchQuery.trim()) {
       setError('Please enter a search term');
+      setLoading(false);
       return;
     }
     
     setLoading(true);
     setError('');
+    setSearchResults([]); // Clear previous search results
     
     try {
       const results = await searchMovies(searchQuery);
       if (results.length === 0) {
         setError('No movies found. Try a different search term.');
+        setFilter('all'); // Reset to default filter if no results
       } else {
         setSearchResults(results);
         setFilter('search');
@@ -82,6 +97,7 @@ function App() {
     } catch (error) {
       console.error('Error searching movies:', error);
       setError('Failed to search movies. Please try again later.');
+      setFilter('all'); // Reset to default filter on error
     } finally {
       setLoading(false);
     }
@@ -137,8 +153,23 @@ function App() {
         display: 'flex',
         flexDirection: 'column'
       }}>
-        <AppBar position="static">
-          <Toolbar sx={{ justifyContent: { xs: 'center', sm: 'space-between' }, flexWrap: 'wrap' }}>
+        <AppBar 
+          position="fixed" 
+          sx={{ 
+            background: isScrolled 
+              ? 'rgba(26, 0, 0, 0.9)' 
+              : 'transparent',
+            boxShadow: isScrolled ? 1 : 'none',
+            transition: 'all 0.3s ease-in-out',
+            backdropFilter: isScrolled ? 'blur(8px)' : 'none'
+          }}
+        >
+          <Toolbar sx={{ 
+            justifyContent: { xs: 'center', sm: 'space-between' }, 
+            flexWrap: 'wrap',
+            minHeight: isScrolled ? '64px' : '80px',
+            transition: 'min-height 0.3s ease-in-out'
+          }}>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Movies
             </Typography>
@@ -151,9 +182,10 @@ function App() {
                     display: 'flex', 
                     alignItems: 'center', 
                     width: { xs: '90%', sm: 400 },
-                    backgroundColor: '#2d0808',
+                    backgroundColor: 'rgba(45, 8, 8, 0.8)',
+                    backdropFilter: 'blur(8px)',
                     '&:hover': {
-                      backgroundColor: '#3d0808',
+                      backgroundColor: 'rgba(61, 8, 8, 0.9)',
                     }
                   }}
                   onSubmit={(e) => {
@@ -203,7 +235,8 @@ function App() {
                     display: { xs: 'none', sm: 'block' },
                     color: '#ff8a80',
                     '&:hover': {
-                      color: '#ff4444'
+                      color: '#ff4444',
+                      backgroundColor: 'rgba(255, 138, 128, 0.08)'
                     }
                   }}
                 >
@@ -213,7 +246,6 @@ function App() {
             </Box>
           </Toolbar>
         </AppBar>
-
         <Box
           sx={{
             height: { xs: '60vh', sm: '70vh' },
@@ -223,6 +255,7 @@ function App() {
             padding: { xs: '3rem 0', sm: '6rem 0' },
             textAlign: 'center',
             marginBottom: '2rem',
+            marginTop: '64px', // Add margin to account for fixed AppBar
             position: 'relative',
             backgroundImage: `url(${backgroundImages[currentBackgroundIndex]})`,
             backgroundSize: 'cover',
@@ -236,7 +269,7 @@ function App() {
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: 'rgba(26, 0, 0, 0.7)', // Dark red overlay
+              backgroundColor: 'rgba(26, 0, 0, 0.7)',
               zIndex: 1
             }
           }}
