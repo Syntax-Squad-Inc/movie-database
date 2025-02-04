@@ -10,15 +10,16 @@ import {
   IconButton,
   InputBase,
   Paper,
-  ButtonGroup,
-  Grid
+  ButtonGroup
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import MovieList from './components/MovieList';
 import Footer from './components/Footer';
 import { searchMovies } from './utils/api';
+import image from '../image/logo.jpg'
 import './App.css';
+import { light } from '@mui/material/styles/createPalette';
 
 // Array of background images - using high-quality movie-themed backgrounds
 const backgroundImages = [
@@ -27,13 +28,13 @@ const backgroundImages = [
 ];
 
 // Debounce function
-const debounce = (func, wait) => {
+/*const debounce = (func, wait) => {
   let timeout;
   return (...args) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
-};
+};*/
 
 const theme = createTheme({
   palette: {
@@ -85,7 +86,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const [error, setError] = useState('');
-  const [movies, setMovies] = useState([]);
+ // const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
   const [searchResults, setSearchResults] = useState([]);
@@ -164,86 +165,88 @@ function App() {
           }}
         >
           <Toolbar sx={{ 
-            justifyContent: { xs: 'center', sm: 'space-between' }, 
-            flexWrap: 'wrap',
-            minHeight: isScrolled ? '64px' : '80px',
-            transition: 'min-height 0.3s ease-in-out'
-          }}>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Movies 
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', width: { xs: '100%', sm: 'auto' }, justifyContent: { xs: 'center', sm: 'flex-end' } }}>
-              {showSearch ? (
-                <Paper
-                  component="form"
-                  sx={{ 
-                    p: '2px 4px', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    width: { xs: '90%', sm: 400 },
-                    backgroundColor: 'rgba(45, 8, 8, 0.8)',
-                    backdropFilter: 'blur(8px)',
-                    '&:hover': {
-                      backgroundColor: 'rgba(61, 8, 8, 0.9)',
-                    }
-                  }}
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleSearch();
-                  }}
-                >
-                  <InputBase
-                    sx={{ 
-                      ml: 1, 
-                      flex: 1,
-                      color: '#ff8a80',
-                      '& .MuiInputBase-input::placeholder': {
-                        color: '#ff8a80',
-                        opacity: 0.7
-                      }
-                    }}
-                    placeholder="Search Movies..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        handleSearch();
-                      }
-                    }}
-                  />
-                  <IconButton 
-                    onClick={handleSearch}
-                    sx={{ 
-                      p: '10px',
-                      color: '#ff8a80',
-                      '&:hover': {
-                        color: '#ff4444'
-                      }
-                    }}
-                  >
-                    <SearchIcon />
-                  </IconButton>
-                </Paper>
-              ) : (
-                <Button
-                  color="inherit"
-                  startIcon={<SearchIcon />}
-                  onClick={() => setShowSearch(true)}
-                  sx={{ 
-                    display: { xs: 'none', sm: 'block' },
-                    color: '#ff8a80',
-                    '&:hover': {
-                      color: '#ff4444',
-                      backgroundColor: 'rgba(255, 138, 128, 0.08)'
-                    }
-                  }}
-                >
-                  Search
-                </Button>
-              )}
-            </Box>
-          </Toolbar>
+  justifyContent: { xs: 'center', sm: 'space-between' }, 
+  flexWrap: 'wrap',
+  minHeight: isScrolled ? '64px' : '80px',
+  transition: 'min-height 0.3s ease-in-out'
+}}>
+  <Box component="img" src={image} color={light} alt="Logo" sx={{ height: 100, mr: 2 }} />
+  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+    Movies 
+  </Typography>
+  <Box sx={{ display: 'flex', alignItems: 'center', width: { xs: '100%', sm: 'auto' }, justifyContent: { xs: 'center', sm: 'flex-end' } }}>
+    {showSearch ? (
+      <Paper
+        component="form"
+        sx={{ 
+          p: '2px 4px', 
+          display: 'flex', 
+          alignItems: 'center', 
+          width: { xs: '90%', sm: 400 },
+          backgroundColor: 'rgba(45, 8, 8, 0.8)',
+          backdropFilter: 'blur(8px)',
+          '&:hover': {
+            backgroundColor: 'rgba(61, 8, 8, 0.9)',
+          }
+        }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSearch();
+        }}
+      >
+        <InputBase
+          sx={{ 
+            ml: 1, 
+            flex: 1,
+            color: '#ff8a80',
+            '& .MuiInputBase-input::placeholder': {
+              color: '#ff8a80',
+              opacity: 0.7
+            }
+          }}
+          placeholder="Search Movies..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleSearch();
+            }
+          }}
+        />
+        <IconButton 
+          onClick={handleSearch}
+          sx={{ 
+            p: '10px',
+            color: '#ff8a80',
+            '&:hover': {
+              color: '#ff4444'
+            }
+          }}
+        >
+          <SearchIcon />
+        </IconButton>
+      </Paper>
+    ) : (
+      <Button
+        color="inherit"
+        startIcon={<SearchIcon />}
+        onClick={() => setShowSearch(true)}
+        sx={{ 
+          display: { xs: 'none', sm: 'block' },
+          color: '#ff8a80',
+          '&:hover': {
+            color: '#ff4444',
+            backgroundColor: 'rgba(255, 138, 128, 0.08)'
+          }
+        }}
+      >
+        Search
+      </Button>
+    )}
+  </Box>
+</Toolbar>
+
         </AppBar>
         <Box
           sx={{
