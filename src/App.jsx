@@ -14,6 +14,7 @@ import {
   Grid
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Importing back arrow icon
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import MovieList from './components/MovieList';
 import Footer from './components/Footer';
@@ -106,6 +107,12 @@ function App() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleBackClick = () => {
+    setFilter('all');
+    setSearchResults([]);
+    setSearchQuery('');
   };
 
   useEffect(() => {
@@ -235,6 +242,22 @@ function App() {
           }}
         >
           <Container sx={{ position: 'relative', zIndex: 2 }}>
+            {filter === 'search' && (
+              <Button
+                startIcon={<ArrowBackIcon />}
+                onClick={handleBackClick}
+                sx={{
+                  color: '#fff',
+                  '&:hover': { color: '#ff4444' },
+                  position: 'fixed',  // Fixed positioning
+                  top: 50,  // Adjust this value to set the distance from the top
+                  right:10,
+                  zIndex: 2
+                }}
+              >
+                Back
+              </Button>
+            )}
             <Typography 
               variant="h2" 
               component="h1" 
@@ -265,7 +288,6 @@ function App() {
         </Box>
 
         <Container>
-
           {loading ? (
             <Typography variant="h6" sx={{ color: '#ff8a80' }}>Loading...</Typography>
           ) : error ? (
