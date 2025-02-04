@@ -17,13 +17,13 @@ import SearchIcon from '@mui/icons-material/Search';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import MovieList from './components/MovieList';
 import Footer from './components/Footer';
-import { searchMovies } from './utils/api';
+import { searchMovies, fetchMoviesByCategory } from './utils/api'; // Assume fetchMoviesByCategory is a new function
 import './App.css';
 
-// Array of background images - using high-quality movie-themed backgrounds
+// Array of background images
 const backgroundImages = [
-  'https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2025&q=80',  // Movie Theater
-  'https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',  // Colorful Cinema Lights
+  'https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2025&q=80',
+  'https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
 ];
 
 const theme = createTheme({
@@ -31,42 +31,13 @@ const theme = createTheme({
     mode: 'dark',
     primary: {
       main: '#d32f2f', // Red primary color
-      light: '#ff6659',
-      dark: '#9a0007',
-    },
-    secondary: {
-      main: '#ff1744', // Accent red
-      light: '#ff616f',
-      dark: '#c4001d',
     },
     background: {
-      default: '#1a0000', // Very dark red background
-      paper: '#2d0808', // Dark red paper
-    },
-    error: {
-      main: '#ff1744',
+      default: '#1a0000',
+      paper: '#2d0808',
     },
     text: {
       primary: '#ffffff',
-      secondary: '#ff8a80',
-    },
-  },
-  components: {
-    MuiAppBar: {
-      styleOverrides: {
-        root: {
-          backgroundColor: '#d32f2f', // Red AppBar
-        },
-      },
-    },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          '&:hover': {
-            backgroundColor: '#ff4444',
-          },
-        },
-      },
     },
   },
 });
@@ -115,8 +86,31 @@ function App() {
     }
   }, [searchQuery]);
 
-  // Background slideshow effect
+  const handleCategoryChange = (category) => {
+    setFilter(category);
+    setLoading(true);
+    setError('');
+    if (category === 'all') {
+      fetchMovies();
+    } else {
+      fetchMoviesByCategory(category); // Fetch movies by category
+    }
+  };
+
+  const fetchMovies = async () => {
+    try {
+      const results = await searchMovies();
+      setMovies(results);
+    } catch (error) {
+      setError('Failed to load movies');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
+    fetchMovies();
+    
     const interval = setInterval(() => {
       setCurrentBackgroundIndex((prevIndex) => 
         (prevIndex + 1) % backgroundImages.length
@@ -139,7 +133,7 @@ function App() {
         <AppBar position="static">
           <Toolbar sx={{ justifyContent: { xs: 'center', sm: 'space-between' }, flexWrap: 'wrap' }}>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Movies 
+              Movies
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', width: { xs: '100%', sm: 'auto' }, justifyContent: { xs: 'center', sm: 'flex-end' } }}>
               {showSearch ? (
@@ -212,7 +206,7 @@ function App() {
             </Box>
           </Toolbar>
         </AppBar>
-        
+
         <Box
           sx={{
             height: { xs: '60vh', sm: '70vh' },
@@ -265,57 +259,27 @@ function App() {
                 margin: '0 auto'
               }}
             >
-              Discover your next favorite movie
+              Discover your favorite movies and more.
             </Typography>
           </Container>
         </Box>
 
-        <Container sx={{ 
-          backgroundColor: '#1a0000', 
-          position: 'relative', 
-          zIndex: 2,
-          flex: '1 0 auto',
-          mb: 4
-        }}>
-          {error && (
-            <Typography 
-              color="error" 
-              sx={{ 
-                textAlign: 'center', 
-                mt: 2,
-                color: '#ff8a80'
-              }}
-            >
-              {error}
-            </Typography>
-          )}
-          <ButtonGroup 
-            sx={{ 
-              mt: 4, 
-              flexWrap: 'wrap',
-              '& .MuiButton-root': {
-                borderColor: '#d32f2f',
-                color: '#ff8a80',
-                '&:hover': {
-                  borderColor: '#ff4444',
-                  backgroundColor: 'rgba(211, 47, 47, 0.1)'
-                }
-              }
-            }} 
-            variant="outlined" 
-            aria-label="outlined button group"
-          >
-            <Button onClick={() => setFilter('all')} sx={{ flex: { xs: '1 0 100%', sm: 'auto' } }}>All</Button>
-            <Button onClick={() => setFilter('popular')} sx={{ flex: { xs: '1 0 100%', sm: 'auto' } }}>Popular</Button>
-            <Button onClick={() => setFilter('latest')} sx={{ flex: { xs: '1 0 100%', sm: 'auto' } }}>Latest</Button>
-          </ButtonGroup>
+        <Container>
 
-          <MovieList 
-            filter={filter} 
-            searchResults={searchResults}
-            loading={loading}
-          />
+          {loading ? (
+            <Typography variant="h6" sx={{ color: '#ff8a80' }}>Loading...</Typography>
+          ) : error ? (
+            <Typography variant="h6" sx={{ color: 'red' }}>{error}</Typography>
+          ) : (
+            <MovieList 
+              filter={filter} 
+              searchResults={searchResults} 
+              loading={loading} 
+              movies={movies} 
+            />
+          )}
         </Container>
+        
         <Footer />
       </div>
     </ThemeProvider>
