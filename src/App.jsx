@@ -208,20 +208,20 @@ function App() {
       </Paper>
     ) : (
       <Button
-        color="inherit"
-        startIcon={<SearchIcon />}
-        onClick={() => setShowSearch(true)}
-        sx={{
-          display: { xs: 'none', sm: 'block' },
-          color: '#ff8a80',
-          '&:hover': {
-            color: '#ff4444',
-            backgroundColor: 'rgba(255, 138, 128, 0.08)'
-          }
-        }}
-      >
-        Search
-      </Button>
+  color="inherit"
+  startIcon={<SearchIcon />}
+  onClick={() => setShowSearch(true)}
+  sx={{
+    display: 'block', // Always display the button
+    color: '#ff8a80',
+    '&:hover': {
+      color: '#ff4444',
+      backgroundColor: 'rgba(255, 138, 128, 0.08)',
+    },
+  }}
+>
+  Search
+</Button>
     )}
   </Box>
 </Toolbar>
@@ -258,19 +258,21 @@ function App() {
           <Container sx={{ position: 'relative', zIndex: 2 }}>
             {filter === 'search' && (
               <Button
-                startIcon={<ArrowBackIcon />}
-                onClick={handleBackClick}
-                sx={{
-                  color: '#fff',
-                  '&:hover': { color: '#ff4444' },
-                  position: 'fixed',  // Fixed positioning
-                  top: 100,  // Adjust this value to set the distance from the top
-                  left:20,
-                  zIndex: 2
-                }}
-              >
-                Back
-              </Button>
+              startIcon={<ArrowBackIcon />}
+              onClick={handleBackClick}
+              sx={{
+                color: '#fff',
+                '&:hover': { color: '#ff4444' },
+                position: 'fixed',
+                top: { xs: 150 }, // Adjusts for smaller screens
+                left: { xs: 10, sm: 20 },
+                zIndex: 2,
+                fontSize: { xs: '0.8rem', sm: '1rem' },
+              }}
+            >
+              Back
+            </Button>
+            
             )}
             <Typography
               variant="h2"

@@ -110,11 +110,16 @@ body {
   position: relative;
   z-index: 15; /* Higher than card z-index */
 }
-
-/* Responsive Design */
+/* Responsive Design for Small Screens */
 @media (max-width: 600px) {
   #root {
     padding: 1rem;
+  }
+
+  .card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem; /* Reduce text size inside cards */
   }
 
   .MuiContainer-root {
@@ -124,62 +129,31 @@ body {
 
   .MuiTypography-h2 {
     font-size: 1.8rem;
+    line-height: 1.2;
   }
 
   .MuiTypography-h5 {
     font-size: 0.9rem;
   }
-}
 
-/* Scrollbar Styling for Modern Look */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--secondary-color);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--accent-color);
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in srgb, var(--accent-color) 80%, white);
-}
-
-/* Existing logo and animation styles */
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+  /* Ensure grid items stack vertically on small screens */
+  .MuiGrid-container {
+    display: block;
+    padding: 0;
   }
-  to {
-    transform: rotate(360deg);
+
+  .logo {
+    height: 4em; /* Smaller logo size for better layout */
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+/* For landscape or even smaller heights */
+@media (max-height: 600px) {
+  body {
+    font-size: 0.9rem;
   }
-}
-
-.read-the-docs {
-  color: #888;
+  
+  .MuiTypography-h2 {
+    font-size: 1.5rem;
+  }
 }
