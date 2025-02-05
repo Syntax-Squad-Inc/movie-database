@@ -10,6 +10,7 @@ import {
   IconButton,
   InputBase,
   Paper
+
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Importing back arrow icon
@@ -18,6 +19,8 @@ import MovieList from './components/MovieList';
 import Footer from './components/Footer';
 import { searchMovies } from './utils/api'; // Assume fetchMoviesByCategory is a new function
 import image from '../image/logoo.png'
+
+
 import './App.css';
 import { light } from '@mui/material/styles/createPalette';
 
@@ -57,7 +60,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const [error, setError] = useState('');
-  const [movies, setMovies] = useState([]);
+ // const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
   const [searchResults, setSearchResults] = useState([]);
@@ -172,6 +175,7 @@ function App() {
 }}>
   <Box component="img" src={image} color={light} alt="Logo" sx={{ height: 100, mr: 2 }} />
   <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+
     Syntax Squad Movies 
   </Typography>
   <Box sx={{ display: 'flex', alignItems: 'center', width: { xs: '100%', sm: 'auto' }, justifyContent: { xs: 'center', sm: 'flex-end' } }}>
