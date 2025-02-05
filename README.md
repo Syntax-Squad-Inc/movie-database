@@ -1,9 +1,18 @@
 # React + Vite
 link https://movie-database-smcf.onrender.com/
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+movie-database is a web application that allows users to search for movies, TV shows, and actors. 
+It provides information about trending, popular, and latest movies, as well as TV shows.
+Users can view details, ratings, and trailers for their favorite movies and TV shows
 
-Currently, two official plugins are available:
+Technologies Used
+React: JavaScript library for building user interfaces.
+Material-UI: React components for faster and easier web development.
+Axios: Promise-based HTTP client for making API requests.
+TMDB API: API for accessing movie, TV show, and actor data.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Clone the repository:
+git clone https://github.com/Syntax-Squad-Inc/movie-database/
+cd movie-database
+npm install
+npm run dev
