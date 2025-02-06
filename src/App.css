@@ -20,6 +20,7 @@ body {
   max-width: 1440px;
   margin: 0 auto;
   padding: 2rem;
+  padding-top: 4rem; /* Increased top padding to create space for navbar */
   text-align: center;
 }
 

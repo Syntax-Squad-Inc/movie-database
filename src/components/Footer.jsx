@@ -5,11 +5,15 @@ function Footer() {
     <Box
       component="footer"
       sx={{
-        py: 3,
-        px: 2,
-        backgroundColor: '#2d0808', // Dark red background
-        borderTop: '1px solid #d32f2f', // Red border
+        backgroundColor: 'transparent',
+        color: '#ff8a80',
+        py: 3, // Adjust or remove padding
+        mt: 'auto', // This pushes the footer to the bottom, remove if not needed
         width: '100%',
+        position: 'relative',
+        bottom: 0,
+        left: 0,
+        right: 0,
       }}
     >
       <Container maxWidth="lg">
@@ -31,38 +35,38 @@ function Footer() {
               mt: { xs: 2, sm: 0 },
             }}
           >
-            <Link 
-              href="#" 
-              sx={{ 
-                color: '#ff8a80', 
+            <Link
+              href="#"
+              sx={{
+                color: '#ff8a80',
                 '&:hover': {
                   color: '#ff4444'
                 }
-              }} 
+              }}
               underline="hover"
             >
               About
             </Link>
-            <Link 
-              href="#" 
-              sx={{ 
-                color: '#ff8a80', 
+            <Link
+              href="#"
+              sx={{
+                color: '#ff8a80',
                 '&:hover': {
                   color: '#ff4444'
                 }
-              }} 
+              }}
               underline="hover"
             >
               Privacy Policy
             </Link>
-            <Link 
-              href="#" 
-              sx={{ 
-                color: '#ff8a80', 
+            <Link
+              href="#"
+              sx={{
+                color: '#ff8a80',
                 '&:hover': {
                   color: '#ff4444'
                 }
-              }} 
+              }}
               underline="hover"
             >
               Terms of Use
