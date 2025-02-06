@@ -20,6 +20,7 @@ body {
   max-width: 1440px;
   margin: 0 auto;
   padding: 2rem;
+  padding-top: 4rem; /* Increased top padding to create space for navbar */
   text-align: center;
 }
 
@@ -109,6 +110,12 @@ body {
 .MuiGrid-container {
   position: relative;
   z-index: 15; /* Higher than card z-index */
+}
+
+.background-section {
+  margin-top: 64px; /* Adjust based on navbar height */
+  position: relative;
+  z-index: 1;
 }
 
 /* Responsive Design */
