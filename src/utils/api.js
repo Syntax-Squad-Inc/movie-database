@@ -109,27 +109,25 @@ export const getMovieGenres = async () => {
 };
 
 // Fetch movies by category using genre ID
-export const fetchMoviesByCategory = async (category) => {
-  const genres = await getMovieGenres();
-  const categoryId = genres.find(genre => genre.name.toLowerCase() === category.toLowerCase())?.id;
-
-  if (!categoryId) {
-    console.error(`Genre not found for category: ${category}`);
+export const fetchMoviesByCategory = async (genreId) => {
+  if (!genreId) {
+    console.error('Genre ID is required');
     return [];
   }
 
   try {
-    console.log(`Fetching movies for category: ${category}`);
+    console.log(`Fetching movies for genre ID: ${genreId}`);
     const response = await axios.get(`${BASE_URL}/discover/movie`, {
       params: {
         api_key: API_KEY,
-        with_genres: categoryId, // category here is the genre ID
+        with_genres: genreId,
       },
     });
     console.log('API Response:', response.data);
     return response.data.results;
   } catch (error) {
-    console.error('Error fetching movies by category:', error.response ? error.response.data : error.message);
+    console.error('Error fetching movies by genre ID:', error.response ? error.response.data : error.message);
     return [];
   }
 };
+
