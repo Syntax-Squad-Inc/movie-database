@@ -1,36 +1,8 @@
-import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Container, Typography, Grid } from '@mui/material';
 import MovieCard from './MovieCard';
-import { fetchTrendingMovies, fetchPopularMovies, fetchLatestMovies } from '../utils/api';
 
-const MovieList = ({ filter, searchResults, loading }) => {
-  const [movies, setMovies] = useState([]);
-
-  useEffect(() => {
-    if (filter === 'search') {
-      setMovies(searchResults);
-    } else {
-      const fetchMovies = async () => {
-        try {
-          let results;
-          if (filter === 'popular') {
-            results = await fetchPopularMovies();
-          } else if (filter === 'latest') {
-            results = await fetchLatestMovies();
-          } else {
-            results = await fetchTrendingMovies();
-          }
-          setMovies(results);
-        } catch (error) {
-          console.error('Error fetching movies:', error);
-        }
-      };
-
-      fetchMovies();
-    }
-  }, [filter, searchResults]);
-
+const MovieList = ({ movies, loading }) => {
   if (loading) {
     return (
       <Typography variant="h6" sx={{ textAlign: 'center', mt: 4 }}>
@@ -63,8 +35,7 @@ const MovieList = ({ filter, searchResults, loading }) => {
 };
 
 MovieList.propTypes = {
-  filter: PropTypes.string.isRequired,
-  searchResults: PropTypes.array.isRequired,
+  movies: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
 };
 
